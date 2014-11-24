@@ -1,0 +1,14 @@
+{
+  "name": "placesweb2",
+  "private": true,
+  "ignore": [],
+  "dependencies": {
+    "bootstrap-sass-official": "~3.1.1",
+    "lodash": "~2.4.1",
+    "leaflet": "~0.7.3",
+    "page": "visionmedia/page.js#~1.4.1",
+    "jquery": "~2.1.1",
+    "leaflet.locatecontrol": "~0.33.0",
+    "jquery-ajax-localstorage-cache": "./vendor/jquery-ajax-localstorage-cache.js"
+  }
+}
