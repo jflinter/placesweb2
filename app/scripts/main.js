@@ -28,8 +28,10 @@ function show (ctx) {
         var firstLine, rest, address = "";
         if (place.caption) {
           var lines = place.caption.split("\n");
-          firstLine = lines[0];
-          rest = lines.splice(1).join("<br>");
+          if (lines.length) {
+            firstLine = lines[0];
+            rest = lines.splice(1).join("<br>");
+          }
         }
         if (place.geocodedAddress && place.geocodedAddress.FormattedAddressLines) {
           address = place.geocodedAddress.FormattedAddressLines.join(", ");
@@ -58,17 +60,21 @@ function show (ctx) {
         marker.addTo(map);
         return marker;
       });
-      map.fitBounds([
-        [_.max(_.map(places, 'latitude')), _.max(_.map(places, 'longitude'))],
-        [_.min(_.map(places, 'latitude')), _.min(_.map(places, 'longitude'))]
-      ], {
-        padding: [20, 20]
-      });
+      if (places.length > 0) {
+        map.fitBounds([
+          [_.max(_.map(places, 'latitude')), _.max(_.map(places, 'longitude'))],
+          [_.min(_.map(places, 'latitude')), _.min(_.map(places, 'longitude'))]
+        ], {
+          padding: [20, 20]
+        });
+      }
     });
   });
   var lc = Leaflet.control.locate({
     follow: false,
     setView: false,
+    markerClass: L.circleMarker,
+    onLocationError: function(err) {},
     markerStyle: {
       clickable: false,
       pointerEvents: 'none',

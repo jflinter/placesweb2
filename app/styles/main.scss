@@ -16,6 +16,7 @@ html {
 
 /* Space out content a bit */
 body {
+  -webkit-user-select: none;
   height: 100%;
   font-family: "Avenir Next", Helvetica, sans-serif !important;
   .map-container {
@@ -76,6 +77,7 @@ div#map, .leaflet-main {
         padding: 10px 0;
       }
       .marker-footer {
+        -webkit-user-select: all;
         font-size: 12px;
         color: #777;
         width: 75%;
