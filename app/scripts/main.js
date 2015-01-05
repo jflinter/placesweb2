@@ -24,12 +24,12 @@ function show (ctx) {
             shadowSize: [0, 0],
           })
         });
-
-        var firstLine, rest, address = "";
-        if (place.caption) {
+        console.log(place);
+        var firstLine = "", rest = "", address = "";
+        if (("caption" in place) && place.caption != "") {
           var lines = place.caption.split("\n");
-          if (lines.length) {
-            firstLine = lines[0];
+          firstLine = lines[0];
+          if (lines.length > 0) {
             rest = lines.splice(1).join("<br>");
           }
         }
@@ -137,6 +137,7 @@ function show (ctx) {
   });
 
   map.on('dragstart', function(event) {
+    clearSelection();
     if (map._popup) {
       $(map._popup._container).removeClass("animated-popup");
       setTimeout(function(){
@@ -145,6 +146,7 @@ function show (ctx) {
     }
   });
   map.on('zoomstart', function(event) {
+    clearSelection();
     if (map._popup) {
       $(map._popup._container).removeClass("animated-popup");
       setTimeout(function(){
@@ -195,6 +197,18 @@ function unShortenUrl(arg, callback) {
     url: 'https://shareplaces.firebaseio.com/urls/' + arg + '.json',
     success: callback
   })
+}
+
+function clearSelection() {
+  if (window.getSelection) {
+    if (window.getSelection().empty) {  // Chrome
+      window.getSelection().empty();
+    } else if (window.getSelection().removeAllRanges) {  // Firefox
+      window.getSelection().removeAllRanges();
+    }
+  } else if (document.selection) {  // IE?
+    document.selection.empty();
+  }
 }
 
 function isRetinaDisplay() {
