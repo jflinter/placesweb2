@@ -36,12 +36,18 @@ function show (ctx) {
         if (place.geocodedAddress && place.geocodedAddress.FormattedAddressLines) {
           address = place.geocodedAddress.FormattedAddressLines.join(", ");
         }
-        var content = "<div class='marker-content' data-placeid='" + place.id + "'>" +
+        var imageIds = ""
+        if (place.imageIds && place.imageIds[0]) {
+          imageIds = "data-imageid='" + place.imageIds[0] + "'";
+        }
+        var content = "<div class='marker-content' data-placeid='" + place.id + "'" + imageIds +">" +
         "<div class='marker-title'>" +
         firstLine +
         "</div>" +
         "<div class='marker-body'>" +
         rest +
+        "</div>" +
+        "<div class='spinner-container'>" +
         "</div>" +
         "<div class='marker-image'>" +
         "</div>" +
@@ -98,24 +104,37 @@ function show (ctx) {
     latlng = map.unproject(targetPoint, zoom);
     map.setView([latlng.lat, latlng.lng, zoom]);
 
-    var placeId = $(popup._content).data('placeid');
-    $.ajax({
-      dataType: "json",
-      localCache: true,
-      url: 'https://shareplaces.firebaseio.com/photos/' + placeId + '.json',
-      success: function(data) {
-        var base64 = _.map(data, function(datum) { return datum.image })[0];
-        if (base64) {
-          $(event.popup._container).find(".marker-image").html("<img class='places-image' src='data:image/png;base64," + base64 + "' />");
+    var imageId = $(popup._content).data('imageid');
+    if (imageId) {
+      var query = encodeURIComponent('{"imageId":"' + imageId + '"}');
+      var url = 'https://api.parse.com/1/classes/Photo/?where=' + query;
+      var mySpinner = spinner();
+      $(popup._container).find(".spinner-container").show().append(mySpinner.el);
+      $.ajax({
+        dataType: "json",
+        localCache: true,
+        url: url,
+        headers: {
+          "X-Parse-Application-Id": "d7IlXMx8MHI3emtHCF5LjKhVXm787WSWHyfKY9w5",
+          "X-Parse-REST-API-Key": "zysGLuJn3owJfEfmJTWOvKfUK2Gk1GtI9qI7kWLA",
+        },
+        success: function(data) {
+          $("<img class='places-image' />").attr('src', data.results[0].imageFile.url).load(function() {
+            if (this.complete) {
+              $(event.popup._container).find(".marker-image").html(this);
+            }
+            $(popup._container).find(".spinner-container").hide()
+            mySpinner.stop();
+            var that = this;
+            setTimeout(function() { $(that).addClass("visible") }, 50);
+          });
+        },
+        failure: function() {
+          mySpinner.stop();
         }
-      }
-    })
+      })
+    }
   });
-
-  // map.on('popupclose', function(event){
-  //   var html = event.popup._container;
-  //   $(html).removeClass("animated-popup");
-  // });
 
   map.on('dragstart', function(event) {
     if (map._popup) {
@@ -185,7 +204,29 @@ function isRetinaDisplay() {
     return true;
   }
   return (window.matchMedia && window.matchMedia(mediaQuery).matches);
-};
+}
+
+function spinner() {
+  var opts = {
+    lines: 9, // The number of lines to draw
+    length: 5, // The length of each line
+    width: 2, // The line thickness
+    radius: 6, // The radius of the inner circle
+    corners: 1, // Corner roundness (0..1)
+    rotate: 0, // The rotation offset
+    direction: 1, // 1: clockwise, -1: counterclockwise
+    color: '#000', // #rgb or #rrggbb or array of colors
+    speed: 1.5, // Rounds per second
+    trail: 100, // Afterglow percentage
+    shadow: false, // Whether to render a shadow
+    hwaccel: true, // Whether to use hardware acceleration
+    className: 'spinner', // The CSS class to assign to the spinner
+    zIndex: 2e9, // The z-index (defaults to 2000000000)
+    top: '50%', // Top position relative to parent
+    left: '50%' // Left position relative to parent
+  };
+  return new Spinner(opts).spin();
+}
 
 page('/:shortened', show);
 page('*', home);

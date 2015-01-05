@@ -9,6 +9,7 @@
     "page": "visionmedia/page.js#~1.4.1",
     "jquery": "~2.1.1",
     "leaflet.locatecontrol": "~0.33.0",
-    "jquery-ajax-localstorage-cache": "./vendor/jquery-ajax-localstorage-cache.js"
+    "jquery-ajax-localstorage-cache": "./vendor/jquery-ajax-localstorage-cache.js",
+    "spin.js": "~2.0"
   }
 }
