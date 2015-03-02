@@ -1,3 +1,21 @@
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
+}
+
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
@@ -16,9 +34,79 @@ html {
 
 /* Space out content a bit */
 body {
+  font-family: "Avenir Next", Helvetica, sans-serif !important;
+  #homeView {
+    background: url(/images/mainBackground.png) no-repeat center center fixed;
+    width: 100%;
+    height: 100%;
+    @media all and (min-width: 1000px) {
+      padding: 50px;
+    }
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    #jumbotron {
+      padding: 10px 20px;
+      background-color: rgba(245, 245, 245, 0.6);
+      width: 100%;
+      h1 {
+        font-weight: 500;
+        margin: 10px 0;
+        float: left;
+      }
+      h2 {
+        display: none;
+      }
+      img {
+        margin-top: 10px;
+        float: right;
+      }
+    }
+    #footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 20px;
+      background-color: rgba(245, 245, 245, 0.6);
+      text-align: center;
+      h2 {
+        font-size: 20px;
+        font-weight: 400;
+      }
+    }
+    @media all and (min-width: 1000px) {
+      #jumbotron {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: rgba(245, 245, 245, 0.6);
+        max-width: 350px;
+        h1 {
+          font-weight: 500;
+        }
+        h2 {
+          font-weight: 400;
+          display: block;
+        }
+        h1, h2 {
+          margin: 10px 0;
+          float: none;
+        }
+        img {
+          margin-top: 10px;
+          float: none;
+        }
+      }
+      #footer {
+        display: none;
+      }
+    }
+  }
+  #mapView {
+
+  }
   -webkit-user-select: none;
   height: 100%;
-  font-family: "Avenir Next", Helvetica, sans-serif !important;
   .map-container {
     height: 100%;
     padding-top: 80px;

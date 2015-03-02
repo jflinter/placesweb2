@@ -3,7 +3,8 @@
 var Leaflet = L.noConflict();
 
 function home () {
-
+  $('#mapView').hide()
+  $('#homeView').show()
 }
 
 function show (ctx) {
@@ -14,7 +15,7 @@ function show (ctx) {
       return;
     }
     fetchMapData(mapId, function(name, places) {
-      $(".title").text(name);
+      $('.title').text(name);
       var markers = _.map(places, function(place) {
         var marker = Leaflet.marker([place.latitude, place.longitude], {
           icon: Leaflet.icon({
